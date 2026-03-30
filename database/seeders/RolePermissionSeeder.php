@@ -126,7 +126,6 @@ class RolePermissionSeeder extends Seeder
                 'password' => Hash::make('P@ssw0rd!Bali2025'),
                 'sekolah_id' => null, // null = Super-Admin
                 'is_aktif' => true,
-                'tanggal_bergabung' => now(),
             ]
         );
 

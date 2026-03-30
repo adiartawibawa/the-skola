@@ -8,11 +8,6 @@ use Src\Core\Shared\Enums\AkreditasiEnum;
 use Src\Core\Shared\Enums\JenjangSekolahEnum;
 use Src\Core\Shared\Enums\KabupatenKotaEnum;
 use Src\Core\Shared\Enums\StatusSekolahEnum;
-use Src\Core\Shared\Enums\Wilayah\DesaKelurahanBadungEnum;
-use Src\Core\Shared\Enums\Wilayah\DesaKelurahanBulelengEnum;
-use Src\Core\Shared\Enums\Wilayah\DesaKelurahanDenpasarEnum;
-use Src\Core\Shared\Enums\Wilayah\DesaKelurahanGianyarEnum;
-use Src\Core\Shared\Enums\Wilayah\DesaKelurahanKarangasemEnum;
 
 /**
  * Seeder: Data sample sekolah-sekolah di Bali
@@ -32,18 +27,18 @@ class SekolahSeeder extends Seeder
     public function run(): void
     {
         $sekolahs = [
-            // ── Kota Denpasar (5171) ──────────────────────────────────────────
+            // ── Kota Denpasar — SMAN 1 ────────────────────────────────
             [
                 'npsn' => '50103491',
                 'nss' => '3010226001001',
-                'nama_sekolah' => 'SMA Negeri 1 Denpasar',
+                'nama_sekolah' => 'Negeri 1 Denpasar',
                 'jenjang' => JenjangSekolahEnum::SMA,
                 'status_sekolah' => StatusSekolahEnum::NEGERI,
                 'akreditasi' => AkreditasiEnum::A,
-                'kabupaten_kota' => KabupatenKotaEnum::DENPASAR, // 5171
-                'kecamatan' => '517104', // Denpasar Utara
-                'desa_kelurahan' => DesaKelurahanDenpasarEnum::DANGIN_PURI_KANGIN->value, // 5171042001
-                'alamat_lengkap' => 'Jl. Kamboja No. 4, Denpasar',
+                'kabupaten_kota' => KabupatenKotaEnum::DENPASAR->value, // '5171'
+                'kecamatan' => '5171020',  // Kec. Denpasar Timur
+                'desa_kelurahan' => '5171020002', // Kel. Dangin Puri Kangin
+                'alamat_lengkap' => 'Jl. Kamboja No. 4',
                 'kode_pos' => '80233',
                 'telepon' => '0361-222605',
                 'email' => 'sman1dps@example.bali.id',
@@ -57,74 +52,82 @@ class SekolahSeeder extends Seeder
                     'warna_tema' => '#1e40af',
                 ],
             ],
+
+            // ── Kota Denpasar — SMKN 1 ────────────────────────────────
             [
                 'npsn' => '50103496',
                 'nss' => '4220226001002',
-                'nama_sekolah' => 'SMK Negeri 1 Denpasar',
+                'nama_sekolah' => 'Negeri 1 Denpasar',
                 'jenjang' => JenjangSekolahEnum::SMK,
                 'status_sekolah' => StatusSekolahEnum::NEGERI,
                 'akreditasi' => AkreditasiEnum::A,
-                'kabupaten_kota' => KabupatenKotaEnum::DENPASAR,
-                'kecamatan' => '517104', // Denpasar Utara
-                'desa_kelurahan' => DesaKelurahanDenpasarEnum::UBUNG_KAJA->value, // 5171042008
-                'alamat_lengkap' => 'Jl. Hos. Cokroaminoto No. 84, Denpasar',
+                'kabupaten_kota' => KabupatenKotaEnum::DENPASAR->value, // '5171'
+                'kecamatan' => '5171030',  // Kec. Denpasar Barat
+                'desa_kelurahan' => '5171030007', // Kel. Pemecutan
+                'alamat_lengkap' => 'Jl. Hos. Cokroaminoto No. 84',
                 'kode_pos' => '80116',
                 'telepon' => '0361-422401',
                 'email' => 'smkn1dps@example.bali.id',
+                'website' => null,
                 'is_aktif' => true,
                 'tanggal_bergabung' => '2024-01-20',
+                'settings' => null,
             ],
 
-            // ── Kabupaten Badung (5103) ───────────────────────────────────────
+            // ── Kabupaten Badung — SMPN 3 Mengwi ──────────────────────
             [
                 'npsn' => '50103502',
                 'nss' => '3010203001003',
-                'nama_sekolah' => 'SMP Negeri 3 Mangupura',
+                'nama_sekolah' => 'Negeri 3 Mengwi',
                 'jenjang' => JenjangSekolahEnum::SMP,
                 'status_sekolah' => StatusSekolahEnum::NEGERI,
                 'akreditasi' => AkreditasiEnum::A,
-                'kabupaten_kota' => KabupatenKotaEnum::BADUNG, // 5103
-                'kecamatan' => '510304', // Mengwi
-                'desa_kelurahan' => DesaKelurahanBadungEnum::MENGWI->value, // 5103040001
-                'alamat_lengkap' => 'Jl. Raya Mengwi No. 12, Badung',
+                'kabupaten_kota' => KabupatenKotaEnum::BADUNG->value, // '5103'
+                'kecamatan' => '5103040',  // Kec. Mengwi
+                'desa_kelurahan' => '5103040001', // Desa Mengwi
+                'alamat_lengkap' => 'Jl. Raya Mengwi No. 12',
                 'kode_pos' => '80351',
                 'telepon' => '0361-8944101',
                 'email' => 'smpn3badung@example.bali.id',
+                'website' => null,
                 'is_aktif' => true,
                 'tanggal_bergabung' => '2024-02-01',
+                'settings' => null,
             ],
 
-            // ── Kabupaten Gianyar (5104) ──────────────────────────────────────
+            // ── Kabupaten Gianyar — SDN 1 Gianyar ─────────────────────
             [
                 'npsn' => '50103610',
                 'nss' => '1010204001004',
-                'nama_sekolah' => 'SD Negeri 1 Gianyar',
+                'nama_sekolah' => 'Negeri 1 Gianyar',
                 'jenjang' => JenjangSekolahEnum::SD,
                 'status_sekolah' => StatusSekolahEnum::NEGERI,
                 'akreditasi' => AkreditasiEnum::A,
-                'kabupaten_kota' => KabupatenKotaEnum::GIANYAR, // 5104
-                'kecamatan' => '510401', // Sukawati
-                'desa_kelurahan' => DesaKelurahanGianyarEnum::SUKAWATI->value, // 5104010001
-                'alamat_lengkap' => 'Jl. Ngurah Rai No. 5, Gianyar',
+                'kabupaten_kota' => KabupatenKotaEnum::GIANYAR->value, // '5104'
+                'kecamatan' => '5104030',  // Kec. Gianyar
+                'desa_kelurahan' => '5104030001', // Kel. Gianyar
+                'alamat_lengkap' => 'Jl. Ngurah Rai No. 5',
                 'kode_pos' => '80511',
                 'telepon' => '0361-943071',
                 'email' => 'sdn1gianyar@example.bali.id',
+                'website' => null,
                 'is_aktif' => true,
                 'tanggal_bergabung' => '2024-02-15',
+                'settings' => null,
             ],
 
-            // ── Kabupaten Buleleng (5108) ─────────────────────────────────────
+            // ── Kabupaten Buleleng — SMAN 1 Singaraja ─────────────────
             [
                 'npsn' => '50103750',
                 'nss' => '3010208001005',
-                'nama_sekolah' => 'SMA Negeri 1 Singaraja',
+                'nama_sekolah' => 'Negeri 1 Singaraja',
                 'jenjang' => JenjangSekolahEnum::SMA,
                 'status_sekolah' => StatusSekolahEnum::NEGERI,
                 'akreditasi' => AkreditasiEnum::A,
-                'kabupaten_kota' => KabupatenKotaEnum::BULELENG, // 5108
-                'kecamatan' => '510806', // Buleleng
-                'desa_kelurahan' => DesaKelurahanBulelengEnum::BANJAR_JAWA->value, // 5108060002
-                'alamat_lengkap' => 'Jl. Pramuka No. 4, Singaraja',
+                'kabupaten_kota' => KabupatenKotaEnum::BULELENG->value, // '5108'
+                'kecamatan' => '5108060',  // Kec. Buleleng
+                'desa_kelurahan' => '5108060002', // Kel. Banjar Jawa
+                'alamat_lengkap' => 'Jl. Pramuka No. 4',
                 'kode_pos' => '81117',
                 'telepon' => '0362-22441',
                 'email' => 'sman1singaraja@example.bali.id',
@@ -139,30 +142,53 @@ class SekolahSeeder extends Seeder
                 ],
             ],
 
-            // ── Kabupaten Karangasem (5107) ───────────────────────────────────
+            // ── Kabupaten Karangasem — SMPN 1 Amlapura ────────────────
             [
                 'npsn' => '50103890',
                 'nss' => '3010207001006',
-                'nama_sekolah' => 'SMP Negeri 1 Amlapura',
+                'nama_sekolah' => 'Negeri 1 Amlapura',
                 'jenjang' => JenjangSekolahEnum::SMP,
                 'status_sekolah' => StatusSekolahEnum::NEGERI,
                 'akreditasi' => AkreditasiEnum::B,
-                'kabupaten_kota' => KabupatenKotaEnum::KARANGASEM, // 5107
-                'kecamatan' => '510704', // Karangasem
-                'desa_kelurahan' => DesaKelurahanKarangasemEnum::KARANGASEM_KELURAHAN->value, // 5107040001
-                'alamat_lengkap' => 'Jl. Ngurah Rai No. 9, Amlapura',
+                'kabupaten_kota' => KabupatenKotaEnum::KARANGASEM->value, // '5107'
+                'kecamatan' => '5107040',  // Kec. Karangasem
+                'desa_kelurahan' => '5107040001', // Kel. Karangasem
+                'alamat_lengkap' => 'Jl. Ngurah Rai No. 9',
                 'kode_pos' => '80811',
                 'telepon' => '0363-21067',
                 'email' => null,
+                'website' => null,
                 'is_aktif' => true,
                 'tanggal_bergabung' => '2024-03-15',
+                'settings' => null,
+            ],
+
+            // ── Kota Denpasar — SLBN 1 Bali ───────────────────────────
+            [
+                'npsn' => '50104012',
+                'nss' => null,
+                'nama_sekolah' => 'Negeri 1 Bali',
+                'jenjang' => JenjangSekolahEnum::SLB,
+                'status_sekolah' => StatusSekolahEnum::NEGERI,
+                'akreditasi' => AkreditasiEnum::A,
+                'kabupaten_kota' => KabupatenKotaEnum::DENPASAR->value, // '5171'
+                'kecamatan' => '5171010',  // Kec. Denpasar Selatan
+                'desa_kelurahan' => '5171010004', // Kel. Panjer
+                'alamat_lengkap' => 'Jl. Seroja Gang IV No. 9',
+                'kode_pos' => '80225',
+                'telepon' => '0361-224745',
+                'email' => 'slbn1bali@example.bali.id',
+                'website' => null,
+                'is_aktif' => true,
+                'tanggal_bergabung' => '2024-04-01',
+                'settings' => null,
             ],
         ];
 
         foreach ($sekolahs as $data) {
-            Sekolah::updateOrCreate(['npsn' => $data['npsn']], $data);
+            Sekolah::create($data);
         }
 
-        $this->command->info('Seeder SKOLA berhasil: '.count($sekolahs).' sekolah di Bali telah disinkronkan.');
+        $this->command->info('Seeder sekolahs: '.count($sekolahs).' sekolah berhasil ditambahkan.');
     }
 }

@@ -15,36 +15,53 @@ namespace Src\Core\Shared\Enums;
  */
 enum KabupatenKotaEnum: string
 {
-    case JEMBRANA = 'Kabupaten Jembrana';
-    case TABANAN = 'Kabupaten Tabanan';
-    case BADUNG = 'Kabupaten Badung';
-    case GIANYAR = 'Kabupaten Gianyar';
-    case KLUNGKUNG = 'Kabupaten Klungkung';
-    case BANGLI = 'Kabupaten Bangli';
-    case KARANGASEM = 'Kabupaten Karangasem';
-    case BULELENG = 'Kabupaten Buleleng';
-    case DENPASAR = 'Kota Denpasar';
+    case JEMBRANA = '5101';
+    case TABANAN = '5102';
+    case BADUNG = '5103';
+    case GIANYAR = '5104';
+    case KLUNGKUNG = '5105';
+    case BANGLI = '5106';
+    case KARANGASEM = '5107';
+    case BULELENG = '5108';
+    case DENPASAR = '5171';
 
-    /** Kode BPS Kemendagri untuk integrasi data pemerintah */
-    public function kodeBps(): string
+    /**
+     * Nama lengkap untuk ditampilkan di UI.
+     * Nama resmi mengikuti Permendagri — "Kabupaten X" atau "Kota X".
+     */
+    public function label(): string
     {
         return match ($this) {
-            self::JEMBRANA => '5101',
-            self::TABANAN => '5102',
-            self::BADUNG => '5103',
-            self::GIANYAR => '5104',
-            self::KLUNGKUNG => '5105',
-            self::BANGLI => '5106',
-            self::KARANGASEM => '5107',
-            self::BULELENG => '5108',
-            self::DENPASAR => '5171',
+            self::JEMBRANA => 'Kabupaten Jembrana',
+            self::TABANAN => 'Kabupaten Tabanan',
+            self::BADUNG => 'Kabupaten Badung',
+            self::GIANYAR => 'Kabupaten Gianyar',
+            self::KLUNGKUNG => 'Kabupaten Klungkung',
+            self::BANGLI => 'Kabupaten Bangli',
+            self::KARANGASEM => 'Kabupaten Karangasem',
+            self::BULELENG => 'Kabupaten Buleleng',
+            self::DENPASAR => 'Kota Denpasar',
         };
     }
 
+    /**
+     * Untuk Filament Select — key adalah kode BPS, value adalah nama.
+     * Contoh return: ['5171' => 'Kota Denpasar', '5103' => 'Kabupaten Badung', ...]
+     */
     public static function options(): array
     {
         return collect(self::cases())
-            ->mapWithKeys(fn ($case) => [$case->value => $case->value])
+            ->mapWithKeys(fn ($case) => [$case->value => $case->label()])
             ->toArray();
+    }
+
+    /**
+     * Resolve dari city_id laravolt ke enum.
+     * Digunakan saat membaca data dari database.
+     * Contoh: KabupatenKotaEnum::fromCityId('5171') → self::DENPASAR
+     */
+    public static function fromCityId(string $cityId): self
+    {
+        return self::from(substr($cityId, 0, 4));
     }
 }

@@ -9,8 +9,13 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
+use Laravolt\Indonesia\Models\City;
+use Laravolt\Indonesia\Models\District;
+use Laravolt\Indonesia\Models\Village;
 use Src\Core\Shared\Enums\AkreditasiEnum;
 use Src\Core\Shared\Enums\JenjangSekolahEnum;
 use Src\Core\Shared\Enums\KabupatenKotaEnum;
@@ -67,9 +72,9 @@ class Sekolah extends Model
         'jenjang',
         'status_sekolah',
         'akreditasi',
-        'kabupaten_kota',
-        'kecamatan',
-        'desa_kelurahan',
+        'kabupaten_kota',    // city_id laravolt: '5171'
+        'kecamatan',         // district_id laravolt: '5171010'
+        'desa_kelurahan',    // village_id laravolt: '5171010001'
         'alamat_lengkap',
         'kode_pos',
         'telepon',
@@ -100,6 +105,38 @@ class Sekolah extends Model
 
     // ── Relasi ─────────────────────────────────────────────────────────
 
+    // ── Relasi ke laravolt/indonesia ──────────────────────────────────
+
+    /**
+     * Kabupaten/kota dari laravolt.
+     * Contoh: $sekolah->city->name → 'KOTA DENPASAR'
+     *
+     * Catatan: nama dari laravolt menggunakan HURUF KAPITAL.
+     * Gunakan Str::title() jika perlu formatting proper case di UI.
+     */
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class, 'kabupaten_kota');
+    }
+
+    /**
+     * Kecamatan dari laravolt.
+     * Contoh: $sekolah->district->name → 'DENPASAR SELATAN'
+     */
+    public function district(): BelongsTo
+    {
+        return $this->belongsTo(District::class, 'kecamatan');
+    }
+
+    /**
+     * Desa/kelurahan dari laravolt.
+     * Contoh: $sekolah->village->name → 'PANJER'
+     */
+    public function village(): BelongsTo
+    {
+        return $this->belongsTo(Village::class, 'desa_kelurahan');
+    }
+
     /**
      * Semua user yang terdaftar di sekolah ini.
      * Termasuk admin, guru, staf — semua role dalam satu sekolah.
@@ -112,12 +149,59 @@ class Sekolah extends Model
     /**
      * Konfigurasi spesifik sekolah ini.
      */
-    public function settings(): HasMany
+    public function sekolahSettings(): HasMany
     {
         return $this->hasMany(SekolahSetting::class, 'sekolah_id');
     }
 
     // ── Accessors ──────────────────────────────────────────────────────
+
+    /**
+     * Nama kabupaten dalam proper case (laravolt pakai CAPS).
+     * Contoh: 'Kota Denpasar' (bukan 'KOTA DENPASAR')
+     *
+     * Prioritas: label dari enum (sudah proper) → fallback ke laravolt
+     */
+    public function getNamaKabupatenAttribute(): string
+    {
+        return $this->kabupaten_kota->label();
+    }
+
+    /**
+     * Nama kecamatan dalam proper case.
+     * Contoh: 'Denpasar Selatan'
+     */
+    public function getNamaKecamatanAttribute(): string
+    {
+        return $this->district
+            ? Str::title(strtolower($this->district->name))
+            : $this->kecamatan;
+    }
+
+    /**
+     * Nama desa/kelurahan dalam proper case.
+     * Contoh: 'Panjer'
+     */
+    public function getNamaDesaAttribute(): string
+    {
+        return $this->village
+            ? Str::title(strtolower($this->village->name))
+            : $this->desa_kelurahan;
+    }
+
+    /**
+     * Alamat lengkap terformat untuk display.
+     * Contoh: 'Jl. Seroja No. 9, Panjer, Denpasar Selatan, Kota Denpasar'
+     */
+    public function getAlamatLengkapFormattedAttribute(): string
+    {
+        return implode(', ', array_filter([
+            $this->alamat_lengkap,
+            $this->nama_desa,
+            $this->nama_kecamatan,
+            $this->nama_kabupaten,
+        ]));
+    }
 
     /**
      * Nama lengkap untuk ditampilkan di UI, termasuk jenjang.

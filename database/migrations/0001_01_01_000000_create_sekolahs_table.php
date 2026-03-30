@@ -5,7 +5,6 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Src\Core\Shared\Enums\AkreditasiEnum;
 use Src\Core\Shared\Enums\JenjangSekolahEnum;
-use Src\Core\Shared\Enums\KabupatenKotaEnum;
 use Src\Core\Shared\Enums\StatusSekolahEnum;
 
 /**
@@ -68,15 +67,15 @@ return new class extends Migration
                 ->comment('Akreditasi BAN-S/M: A, B, C, Belum, TT');
 
             // ── Lokasi (konteks Bali) ──────────────────────────────────
-            $table->enum('kabupaten_kota', array_column(KabupatenKotaEnum::cases(), 'value'))
-                ->comment('Kode BPS Kabupaten/Kota (4 digit), contoh: 5171 = Denpasar');
+            $table->string('kabupaten_kota', 4)
+                ->comment('city_id laravolt — 4 digit, contoh: 5171 = Kota Denpasar');
 
             // PERUBAHAN: String length diturunkan ke 6 digit sesuai Enum
-            $table->string('kecamatan', 6)
-                ->comment('Kode BPS kecamatan 6 digit, contoh: 517101 = Denpasar Selatan');
+            $table->string('kecamatan', 7)
+                ->comment('district_id laravolt — 7 digit, contoh: 5171010 = Kec. Denpasar Selatan');
 
             $table->string('desa_kelurahan', 10)
-                ->comment('Kode BPS desa/kelurahan 10 digit, contoh: 5171011001 = Sesetan');
+                ->comment('village_id laravolt — 10 digit, contoh: 5171010004 = Kel. Panjer');
 
             $table->text('alamat_lengkap')
                 ->comment('Alamat jalan lengkap termasuk nomor dan gang');
@@ -117,15 +116,19 @@ return new class extends Migration
                 ->comment('Soft delete — data sekolah tidak boleh dihapus permanen');
 
             // ── Index Strategy ─────────────────────────────────────────
-            // Index tunggal untuk filter wilayah (dashboard Super-Admin)
+            // Index tunggal untuk filter wilayah — query paling sering Super-Admin
             $table->index('kabupaten_kota', 'idx_sekolahs_kabkota');
 
-            // Composite: filter jenjang + status aktif (query paling sering)
+            // Composite: kabupaten + jenjang (laporan Dinas Pendidikan Bali)
+            $table->index(['kabupaten_kota', 'jenjang'], 'idx_sekolahs_kabkota_jenjang');
+
+            // Composite: jenjang + aktif (filter utama dashboard)
             $table->index(['jenjang', 'is_aktif'], 'idx_sekolahs_jenjang_aktif');
 
-            // Composite: filter wilayah + jenjang (laporan per dinas)
-            $table->index(['kabupaten_kota', 'jenjang'], 'idx_sekolahs_kabkota_jenjang');
+            // Index kecamatan — filter drilldown dari kabupaten ke kecamatan
             $table->index('kecamatan', 'idx_sekolahs_kecamatan');
+
+            // Composite: kecamatan + desa (filter terlengkap, jarang dipakai)
             $table->index(['kecamatan', 'desa_kelurahan'], 'idx_sekolahs_kec_desa');
         });
     }
